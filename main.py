@@ -1,7 +1,32 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status, HTTPException
 
 app = FastAPI()
 
-@app.get("/")
-def home():
-    return {"message":"Hello world from FastAPI"}
+@app.post("/create_user", status_code=status.HTTP_201_CREATED)
+def create_user():
+    return {
+        "message": "User created"
+    }
+
+@app.get("/user")
+def get_user():
+    return {
+        "status": "Success",
+        "message": "User fetched",
+        "data": {
+            "name": "Yash",
+            "age": "21"
+        }
+    }
+
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    if user_id != 1:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+    return {
+        "id": 1,
+        "name": "Yash"
+    }
